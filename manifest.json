@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Disable My Button",
+  "name": "Disable Tender Button",
   "version": "1.0",
-  "description": "Disable a button on my webpage",
+  "description": "Disables the Tender button on the POS page.",
   "content_scripts": [
     {
       "matches": [
-        "http://127.0.0.1:5500/*"
+        "http://hbu-pos:8080/*"
       ],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_idle"
     }
   ]
 }
