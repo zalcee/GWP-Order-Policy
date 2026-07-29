@@ -1,4 +1,4 @@
-ALU_CONFIG = {
+const ALU_CONFIG = {
 
     minimumAmount: 2500,
 
