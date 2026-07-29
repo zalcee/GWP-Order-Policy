@@ -1,51 +1,109 @@
-let TARGET_ALUS = new Set();
-let MINIMUM_AMOUNT = 2500;
+// ===============================
+// Configuration
+// ===============================
 
-async function loadConfig() {
-    const url = chrome.runtime.getURL("alus.json");
-    const response = await fetch(url);
-    const config = await response.json();
+const TARGET_ALUS = new Set(ALU_CONFIG.alus);
+const MINIMUM_AMOUNT = ALU_CONFIG.minimumAmount;
 
-    TARGET_ALUS = new Set(config.alus);
-    MINIMUM_AMOUNT = config.minimumAmount;
-}
+
+// ===============================
+// Read Transaction Total
+// ===============================
 
 function getTransactionTotal() {
-    const totalInput = document.getElementById("documentTotal");
-    if (!totalInput) return 0;
 
-    return parseFloat(totalInput.value.replace(/[₱,]/g, "")) || 0;
+    const totalInput = document.getElementById("documentTotal");
+
+    if (!totalInput)
+        return 0;
+
+    return parseFloat(
+        totalInput.value.replace(/[₱,]/g, "")
+    ) || 0;
+
 }
 
-function hasTargetALU() {
+
+// ===============================
+// Detect Restricted ALU
+// ===============================
+
+function hasRestrictedALU() {
+
     const pageText = document.body.innerText;
 
     for (const alu of TARGET_ALUS) {
+
         if (pageText.includes(alu)) {
+
             return true;
+
         }
+
     }
 
     return false;
+
 }
+
+
+// ===============================
+// Enable / Disable Tender Button
+// ===============================
 
 function updateTenderButton() {
-    const tender = document.getElementById("tenderbutton");
-    if (!tender) return;
+
+    const tenderButton = document.getElementById("tenderbutton");
+
+    if (!tenderButton)
+        return;
 
     const total = getTransactionTotal();
+    const hasALU = hasRestrictedALU();
 
-    if (hasTargetALU() && total < MINIMUM_AMOUNT) {
-        tender.disabled = true;
-    } else {
-        tender.disabled = false;
+    if (hasALU && total < MINIMUM_AMOUNT) {
+
+        tenderButton.disabled = true;
+        tenderButton.style.pointerEvents = "none";
+        tenderButton.style.opacity = "0.5";
+        tenderButton.title =
+            `Minimum purchase of ₱${MINIMUM_AMOUNT.toLocaleString()} required.`;
+
     }
+    else {
+
+        tenderButton.disabled = false;
+        tenderButton.style.pointerEvents = "";
+        tenderButton.style.opacity = "";
+        tenderButton.title = "";
+
+    }
+
 }
 
-(async () => {
-    await loadConfig();
+
+// ===============================
+// Observe Changes
+// ===============================
+
+const observer = new MutationObserver(() => {
 
     updateTenderButton();
 
-    setInterval(updateTenderButton, 500);
-})();
+});
+
+observer.observe(document.body, {
+
+    childList: true,
+    subtree: true,
+    characterData: true
+
+});
+
+
+// Initial Run
+updateTenderButton();
+
+
+// Backup Check
+setInterval(updateTenderButton, 500);

@@ -2,16 +2,17 @@
   "manifest_version": 3,
   "name": "POS Tender Restriction",
   "version": "1.0",
+  "description": "Disable Tender button based on ALU and minimum purchase.",
   "content_scripts": [
     {
-      "matches": ["http://hbu-pos:8080/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["alus.json"],
-      "matches": ["http://hbu-pos:8080/*"]
+      "matches": [
+        "http://hbu-pos:8080/*"
+      ],
+      "js": [
+        "alus.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
     }
   ]
 }
