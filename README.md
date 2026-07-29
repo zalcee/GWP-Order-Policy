@@ -6,5 +6,5 @@
 2. Go to chrome://extensions.
 3. Enable Developer mode.
 4. Click Load unpacked.
-5. Select the disableTender folder.
+5. Select the extension folder.
 6. Open or refresh your POS page.
