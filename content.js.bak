@@ -1,0 +1,42 @@
+const TARGET_ALU = "1000018795001";
+const MIN_TOTAL = 2500;
+
+function getTransactionTotal() {
+    const totalInput = document.getElementById("documentTotal");
+
+    if (!totalInput) return 0;
+
+    return parseFloat(
+        totalInput.value.replace(/[₱,]/g, "")
+    ) || 0;
+}
+
+function hasTargetALU() {
+    return document.body.innerText.includes(TARGET_ALU);
+}
+
+function updateTenderButton() {
+    const tender = document.getElementById("tenderbutton");
+    if (!tender) return;
+
+    const total = getTransactionTotal();
+    const hasALU = hasTargetALU();
+
+    if (hasALU && total < MIN_TOTAL) {
+        tender.disabled = true;
+        tender.style.pointerEvents = "none";
+        tender.style.opacity = "0.5";
+    } else {
+        tender.disabled = false;
+        tender.style.pointerEvents = "";
+        tender.style.opacity = "";
+    }
+
+    console.log({
+        total,
+        hasALU,
+        disabled: tender.disabled
+    });
+}
+
+setInterval(updateTenderButton, 200);

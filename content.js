@@ -1,23 +1,76 @@
-const disableTenderButton = () => {
-    const btn = document.getElementById("tenderbutton");
+const TARGET_ALUS = new Set([
+    "1000019215006",
+    "1000018795001",
+    "1000011111111",
+    "1000012222222"
+]);
 
-    if (btn) {
-        btn.disabled = true;
-        btn.style.pointerEvents = "none";
-        btn.style.opacity = "0.5";
-        btn.title = "Disabled by Chrome Extension";
+const MINIMUM_AMOUNT = 2500;
+
+// Get transaction total
+function getTransactionTotal() {
+    const totalInput = document.getElementById("documentTotal");
+
+    if (!totalInput) {
+        return 0;
     }
+
+    return parseFloat(
+        totalInput.value.replace(/[₱,]/g, "")
+    ) || 0;
 }
 
+// Check if any target ALU exists on the page
+function hasTargetALU() {
+    const pageText = document.body.innerText;
 
-disableTenderButton();
+    for (const alu of TARGET_ALUS) {
+        if (pageText.includes(alu)) {
+            return true;
+        }
+    }
 
+    return false;
+}
 
-const observer = new MutationObserver(() => {
-    disableTenderButton();
-});
+// Enable/Disable Tender button
+function updateTenderButton() {
+    const tenderButton = document.getElementById("tenderbutton");
+
+    if (!tenderButton) {
+        return;
+    }
+
+    const total = getTransactionTotal();
+    const hasALU = hasTargetALU();
+
+    if (hasALU && total < MINIMUM_AMOUNT) {
+        tenderButton.disabled = true;
+        tenderButton.style.pointerEvents = "none";
+        tenderButton.style.opacity = "0.5";
+        tenderButton.title = `Minimum purchase of ₱${MINIMUM_AMOUNT.toLocaleString()} required.`;
+    } else {
+        tenderButton.disabled = false;
+        tenderButton.style.pointerEvents = "";
+        tenderButton.style.opacity = "";
+        tenderButton.title = "";
+    }
+
+    console.log({
+        hasALU,
+        total,
+        disabled: tenderButton.disabled
+    });
+}
+
+updateTenderButton();
+
+const observer = new MutationObserver(updateTenderButton);
 
 observer.observe(document.body, {
     childList: true,
-    subtree: true
+    subtree: true,
+    characterData: true
 });
+
+setInterval(updateTenderButton, 500);
