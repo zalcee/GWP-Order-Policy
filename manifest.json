@@ -1,15 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Disable Tender Button",
+  "name": "POS Tender Restriction",
   "version": "1.0",
-  "description": "Disables the Tender button on the POS page.",
   "content_scripts": [
     {
-      "matches": [
-        "http://hbu-pos:8080/*"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_idle"
+      "matches": ["http://hbu-pos:8080/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["alus.json"],
+      "matches": ["http://hbu-pos:8080/*"]
     }
   ]
 }
