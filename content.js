@@ -49,6 +49,10 @@ function updateTenderButton() {
     if (!tenderButton) {
         return;
     }
+    //clear the cache after transaction prevent inheriting on another transaction
+    if (getTransactionTotal() === 0) {
+    savedComment1 = "";
+    }   
 
     const hasALU = hasTargetALU();
 
