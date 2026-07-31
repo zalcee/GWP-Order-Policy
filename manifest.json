@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Disable Tender Button",
+  "name": "GWP Minspend Control",
   "version": "1.0",
   "description": "Disables the Tender button on the POS page.",
   "content_scripts": [
