@@ -75,15 +75,15 @@ function updateTenderButton() {
         ? `Minimum purchase of ₱${MINIMUM_AMOUNT.toLocaleString()} and Comment1 = JULYTB required.`
         : "";
 
-    console.log({
-        hasALU,
-        total,
-        comment1,
-        savedComment1,
-        validAmount,
-        validComment,
-        disabled: disable
-    });
+    // console.log({
+    //     hasALU,
+    //     total,
+    //     comment1,
+    //     savedComment1,
+    //     validAmount,
+    //     validComment,
+    //     disabled: disable
+    // });
 }
 
 updateTenderButton();
