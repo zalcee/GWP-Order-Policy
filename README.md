@@ -1,6 +1,6 @@
-## Prism GWP Tender Control
+## Prism GWP Tender Control Extension
 
-### Install
+### Installation
 
 1. Open Chrome.
 2. Go to chrome://extensions.
