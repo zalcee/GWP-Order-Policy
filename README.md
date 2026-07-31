@@ -1,4 +1,4 @@
-## Prism Disable Tender Extension
+## Prism GWP Tender Control
 
 ### Install
 
