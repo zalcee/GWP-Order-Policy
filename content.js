@@ -2,9 +2,11 @@ const TARGET_ALUS = new Set([
     "1000018795001"
 ]);
 
-const MINIMUM_AMOUNT = 2500;
+const MINIMUM_AMOUNT = 2499;
+const REQUIRED_COMMENT = "JULYTB";
 
-// Get transaction total
+let savedComment1 = "";
+
 function getTransactionTotal() {
     const totalInput = document.getElementById("documentTotal");
 
@@ -17,7 +19,6 @@ function getTransactionTotal() {
     ) || 0;
 }
 
-// Check if any target ALU exists on the page
 function hasTargetALU() {
     const pageText = document.body.innerText;
 
@@ -30,44 +31,78 @@ function hasTargetALU() {
     return false;
 }
 
-// Enable/Disable Tender button
+function getComment1() {
+
+    const input = document.getElementById("comment1");
+
+    if (input) {
+        savedComment1 = input.value.trim().toUpperCase();
+    }
+
+    return savedComment1;
+}
+
 function updateTenderButton() {
+
     const tenderButton = document.getElementById("tenderbutton");
 
     if (!tenderButton) {
         return;
     }
 
-    const total = getTransactionTotal();
     const hasALU = hasTargetALU();
 
-    if (hasALU && total < MINIMUM_AMOUNT) {
-        tenderButton.disabled = true;
-        tenderButton.style.pointerEvents = "none";
-        tenderButton.style.opacity = "0.5";
-        tenderButton.title = `Minimum purchase of ₱${MINIMUM_AMOUNT.toLocaleString()} required.`;
-    } else {
+    if (!hasALU) {
         tenderButton.disabled = false;
         tenderButton.style.pointerEvents = "";
         tenderButton.style.opacity = "";
         tenderButton.title = "";
+        return;
     }
+
+    const total = getTransactionTotal();
+    const comment1 = getComment1();
+
+    const validAmount = total >= MINIMUM_AMOUNT;
+    const validComment = comment1 === REQUIRED_COMMENT;
+
+    const disable = !(validAmount && validComment);
+
+    tenderButton.disabled = disable;
+    tenderButton.style.pointerEvents = disable ? "none" : "";
+    tenderButton.style.opacity = disable ? "0.5" : "";
+    tenderButton.title = disable
+        ? `Minimum purchase of ₱${MINIMUM_AMOUNT.toLocaleString()} and Comment1 = JULYTB required.`
+        : "";
 
     console.log({
         hasALU,
         total,
-        disabled: tenderButton.disabled
+        comment1,
+        savedComment1,
+        validAmount,
+        validComment,
+        disabled: disable
     });
 }
 
 updateTenderButton();
 
-const observer = new MutationObserver(updateTenderButton);
+const observer = new MutationObserver(() => {
+    updateTenderButton();
+});
 
 observer.observe(document.body, {
     childList: true,
     subtree: true,
     characterData: true
+});
+
+document.addEventListener("input", (e) => {
+    if (e.target && e.target.id === "comment1") {
+        savedComment1 = e.target.value.trim().toUpperCase();
+        updateTenderButton();
+    }
 });
 
 setInterval(updateTenderButton, 500);
