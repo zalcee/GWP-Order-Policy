@@ -3,7 +3,7 @@ const TARGET_ALUS = new Set([
 ]);
 
 const MINIMUM_AMOUNT = 2499;
-const REQUIRED_COMMENT = "JULYTB";
+const REQUIRED_COMMENT = "CTBGWP";
 
 let savedComment1 = "";
 
