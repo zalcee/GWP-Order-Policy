@@ -128,12 +128,15 @@ observer.observe(document.body, {
 });
 
 document.addEventListener("input", (e) => {
-
     if (e.target && e.target.id === "comment1") {
-        savedComment1 = e.target.value.trim().toUpperCase();
+        const totalInput = document.getElementById("documentTotal");
+
+        if (!totalInput || !totalInput.value.trim().startsWith("-")) {
+            savedComment1 = e.target.value.trim().toUpperCase();
+        }
+
         updateTenderButton();
     }
-
 }, true);
 
 setInterval(updateTenderButton, 500);
