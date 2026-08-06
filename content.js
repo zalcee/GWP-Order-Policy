@@ -51,10 +51,12 @@ function hasTargetALU() {
 }
 
 function getComment1() {
-
     const input = document.getElementById("comment1");
+    const totalInput = document.getElementById("documentTotal");
 
-    if (input) {
+    if (totalInput && totalInput.value.trim().startsWith("-")) {
+        savedComment1 = REQUIRED_COMMENT;
+    } else if (input) {
         savedComment1 = input.value.trim().toUpperCase();
     }
 
