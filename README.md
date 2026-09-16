@@ -9,12 +9,7 @@
 5. Select the extension folder.
 6. Open or refresh your POS page.
 
-### Logic
+## Versions
 
-ALU = 1000018795001 // Trigger the tender lock
-
-condition to unlock
-
-Total Amount => 2499 & Comment1 = JULYTB
-
-[Minspend](https://github.com/zalcee/GWP-Order-Policy/releases/tag/v1.0)
+[V1.0 - Minspend](https://github.com/zalcee/GWP-Order-Policy/releases/tag/v1.0)
+V2.0 - BUY2
