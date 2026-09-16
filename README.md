@@ -16,3 +16,5 @@ ALU = 1000018795001 // Trigger the tender lock
 condition to unlock
 
 Total Amount => 2499 & Comment1 = JULYTB
+
+[Minspend](https://github.com/zalcee/GWP-Order-Policy/releases/tag/v1.0)
