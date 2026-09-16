@@ -62,10 +62,6 @@ function isPairFromLotNumber(lotElement) {
 FIND THE FULL ITEM BLOCK (for ALU + Quantity)
 ============================================================
 
-Walk further up from the Lot Number element until we find
-a container whose text includes BOTH "ALU" and "Quantity" —
-that's the full line-item block.
-============================================================
 */
 function findItemBlock(lotElement) {
     let current = lotElement;
