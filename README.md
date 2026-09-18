@@ -11,7 +11,7 @@
 
 ## Versions
 
-[V2.0 - BUY2](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
+[V2.0 - Buy2](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
 
 [V1.0 - Minspend](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip)
 
