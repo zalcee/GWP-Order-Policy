@@ -1,5 +1,9 @@
 ## Prism GWP Tender Control Extension
 
+### Technology Used
+![Static Badge](https://img.shields.io/badge/Javascript-black?logo=javascript)
+
+
 ### Installation
 
 1. Open Chrome.
