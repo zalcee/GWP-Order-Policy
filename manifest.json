@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "GWP Minspend Control",
-  "version": "1.0",
-  "description": "Control GWP minimum spend.",
+  "name": "GWP Buy 2 Control",
+  "version": "2.0",
+  "description": "Control GWP Buy 2 get totebag.",
   "content_scripts": [
     {
       "matches": [
