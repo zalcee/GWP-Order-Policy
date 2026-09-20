@@ -13,7 +13,7 @@
 
 ## Versions
 
-[![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
-[![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip)
+[![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green&labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
+[![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green&labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip)
 
 
