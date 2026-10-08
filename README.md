@@ -13,7 +13,9 @@
 
 ## Versions
 
+[![Static Badge](https://img.shields.io/badge/Buy2-v2.1-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.1.zip)
 [![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
 [![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip)
 
 
+***2.1 Update :** Update pairs identifier instead of just "Plugin Manager" also add years **sample "2026"***
