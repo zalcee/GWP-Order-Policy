@@ -1,4 +1,6 @@
 ## Prism GWP Tender Control Extension
+![Static Badge](https://img.shields.io/badge/Javascript-black?logo=javascript)
+
 
 ### Installation
 
@@ -9,10 +11,9 @@
 5. Select the extension folder.
 6. Open or refresh your POS page.
 
-### Logic
+## Versions
 
-ALU = 1000018795001 // Trigger the tender lock
+[![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip)
+[![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip)
 
-condition to unlock
 
-Total Amount => 2499 & Comment1 = JULYTB
