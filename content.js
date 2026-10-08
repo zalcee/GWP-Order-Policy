@@ -38,7 +38,7 @@ function getTransactionArea() {
 
 /*
 ============================================================
-CHECK IF LOT NUMBER IS "PLUGIN MANAGER"
+CHECK IF LOT NUMBER IS "PLUGIN MANAGER" OR A YEAR
 ============================================================
 */
 function isPairFromLotNumber(lotElement) {
@@ -48,7 +48,8 @@ function isPairFromLotNumber(lotElement) {
         const text =
             current.textContent.replace(/\s+/g, " ").trim();
 
-        if (/Lot Number/i.test(text) && /Plugin Manager/i.test(text)) {
+        // Checks for "Lot Number" AND either "Plugin Manager" or a 2000s year
+        if (/Lot Number/i.test(text) && /(Plugin Manager|\b20\d{2}\b)/i.test(text)) {
             return true;
         }
         current = current.parentElement;
@@ -61,7 +62,6 @@ function isPairFromLotNumber(lotElement) {
 ============================================================
 FIND THE FULL ITEM BLOCK (for ALU + Quantity)
 ============================================================
-
 */
 function findItemBlock(lotElement) {
     let current = lotElement;
@@ -97,7 +97,8 @@ function getPairCount() {
         const text =
             element.textContent.replace(/\s+/g, " ").trim();
 
-        if (text !== "Lot Number" && text !== "Lot Number Plugin Manager") {
+        // Allow any text block that starts with "Lot Number"
+        if (!/^Lot Number/i.test(text)) {
             continue;
         }
 
@@ -164,7 +165,7 @@ function debugPairDetection() {
     for (const element of allElements) {
         const text = element.textContent.replace(/\s+/g, " ").trim();
 
-        if (text !== "Lot Number" && text !== "Lot Number Plugin Manager") {
+        if (!/^Lot Number/i.test(text) && !/^\d+$/.test(text)) {
             continue;
         }
         if (counted.has(element)) continue;
@@ -258,17 +259,6 @@ function updateTenderButton() {
     } else {
         tenderButton.title = "";
     }
-
-    console.log({
-        targetALU: true,
-        pairCount,
-        requiredPairs: REQUIRED_PAIRS,
-        comment1,
-        requiredComment: REQUIRED_COMMENT,
-        validPairs,
-        validComment,
-        tenderDisabled: disable
-    });
 }
 
 
