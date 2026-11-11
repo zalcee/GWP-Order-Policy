@@ -13,8 +13,8 @@
 
 ## Versions
 
-| Version | Download | Notes |
+| Download | Version | Notes |
 | :-------| :--------| :-----|
-|v2.1     |[![Static Badge](https://img.shields.io/badge/Buy2-v2.1-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.1.zip) | ***2.1 Update :** Update pairs identifier instead of just "Plugin Manager" also add years **sample "2026"** (Untested version)* |
-|v2.0     | [![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip) | |
-|v1.0     | [![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip) |  |
+|[![Static Badge](https://img.shields.io/badge/Buy2-v2.1-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.1.zip) | v2.1 | ***2.1 Update :** Update pairs identifier instead of just "Plugin Manager" also add years **sample "2026"** (Untested version)* |
+| [![Static Badge](https://img.shields.io/badge/Buy2-v2.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v2.0.zip) | v2.0 | |
+| [![Static Badge](https://img.shields.io/badge/Minspend-v1.0-green?labelColor=black)](https://github.com/zalcee/GWP-Order-Policy/archive/refs/tags/v1.0.zip) | v1.0 | |
