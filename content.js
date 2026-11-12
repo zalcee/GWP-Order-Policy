@@ -3,6 +3,8 @@ const TARGET_ALUS = new Set([
     "1000018795001"
 ]);
 
+const REQUIRED_COMMENT = "CTBGWP";
+
 let lastState = null;
 
 
@@ -32,9 +34,7 @@ function hasTargetALU() {
     const text = getTransactionArea().innerText || "";
 
     for (const alu of TARGET_ALUS) {
-        const regex = new RegExp("\\b" + alu + "\\b");
-
-        if (regex.test(text)) {
+        if (new RegExp("\\b" + alu + "\\b").test(text)) {
             return true;
         }
     }
@@ -84,6 +84,31 @@ function hasDiscount() {
 
 /*
 ============================================================
+CHECK COMMENT1
+============================================================
+*/
+
+function getComment1() {
+
+    const input = document.getElementById("comment1");
+    const totalInput = document.getElementById("documentTotal");
+
+    // Preserve original negative-total behavior.
+    if (
+        totalInput &&
+        totalInput.value.trim().startsWith("-")
+    ) {
+        return REQUIRED_COMMENT;
+    }
+
+    return input
+        ? input.value.trim().toUpperCase()
+        : "";
+}
+
+
+/*
+============================================================
 UPDATE TENDER BUTTON
 ============================================================
 */
@@ -96,36 +121,74 @@ function updateTenderButton() {
 
     const targetPresent = hasTargetALU();
 
-    // Only validate discounts when target ALU exists.
-    const discountDetected =
-        targetPresent && hasDiscount();
+    // Normal transactions have no additional restrictions.
+    if (!targetPresent) {
+
+        lastState = null;
+
+        tenderButton.disabled = false;
+        tenderButton.style.pointerEvents = "";
+        tenderButton.style.opacity = "";
+        tenderButton.title = "";
+
+        return;
+    }
+
+    const discountDetected = hasDiscount();
+    const comment1 = getComment1();
+
+    const validDiscount = !discountDetected;
+    const validComment = comment1 === REQUIRED_COMMENT;
+
+    const disable = !(validDiscount && validComment);
+
+    const state = JSON.stringify({
+        discountDetected,
+        validComment,
+        disable
+    });
 
     if (
-        lastState === discountDetected &&
-        tenderButton.disabled === discountDetected
+        lastState === state &&
+        tenderButton.disabled === disable
     ) {
         return;
     }
 
-    lastState = discountDetected;
+    lastState = state;
 
-    tenderButton.disabled = discountDetected;
+    tenderButton.disabled = disable;
 
     tenderButton.style.pointerEvents =
-        discountDetected ? "none" : "";
+        disable ? "none" : "";
 
     tenderButton.style.opacity =
-        discountDetected ? "0.5" : "";
+        disable ? "0.5" : "";
 
-    tenderButton.title = discountDetected
-        ? "Tender is not allowed: Discount detected with target ALU."
-        : "";
+    if (disable) {
+
+        if (!validDiscount && !validComment) {
+            tenderButton.title =
+                "Discounts are not allowed. Comment1 must be CTBGWP.";
+
+        } else if (!validDiscount) {
+            tenderButton.title =
+                "Discount detected. Remove the discount before Tender.";
+
+        } else {
+            tenderButton.title =
+                "Comment1 must be CTBGWP before Tender.";
+        }
+
+    } else {
+        tenderButton.title = "";
+    }
 }
 
 
 /*
 ============================================================
-CLICK PROTECTION
+PREVENT TENDER CLICK
 ============================================================
 */
 
@@ -135,7 +198,12 @@ document.addEventListener("click", function(e) {
 
     if (!button) return;
 
-    if (hasTargetALU() && hasDiscount()) {
+    if (!hasTargetALU()) return;
+
+    const discountDetected = hasDiscount();
+    const validComment = getComment1() === REQUIRED_COMMENT;
+
+    if (discountDetected || !validComment) {
 
         e.preventDefault();
         e.stopPropagation();
@@ -144,8 +212,35 @@ document.addEventListener("click", function(e) {
         updateTenderButton();
 
         console.warn(
-            "Tender blocked: Target ALU exists and discount detected."
+            "Tender blocked:",
+            {
+                discountDetected,
+                validComment
+            }
         );
+    }
+
+}, true);
+
+
+/*
+============================================================
+MONITOR COMMENT1 INPUT
+============================================================
+*/
+
+document.addEventListener("input", function(e) {
+
+    if (e.target && e.target.id === "comment1") {
+        updateTenderButton();
+    }
+
+}, true);
+
+document.addEventListener("change", function(e) {
+
+    if (e.target && e.target.id === "comment1") {
+        updateTenderButton();
     }
 
 }, true);
@@ -157,7 +252,9 @@ MONITOR TRANSACTION CHANGES
 ============================================================
 */
 
-const observer = new MutationObserver(updateTenderButton);
+const observer = new MutationObserver(() => {
+    updateTenderButton();
+});
 
 observer.observe(document.body, {
     childList: true,

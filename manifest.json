@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "GWP Buy 2 Control",
-  "version": "2.0",
-  "description": "Control GWP Buy 2 get totebag.",
+  "name": "PWP Control",
+  "version": "3.0",
+  "description": "Control PWP Buy regular price item and get preffered bag and card designs.",
   "content_scripts": [
     {
       "matches": [
