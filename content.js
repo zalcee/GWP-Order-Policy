@@ -5,7 +5,8 @@ const TARGET_ALUS = new Set([
 
 const REQUIRED_COMMENT = "CTBGWP";
 
-let lastState = null;
+let savedComment1 = "";
+let lastValidationState = "";
 
 
 /*
@@ -25,7 +26,7 @@ function getTransactionArea() {
 
 /*
 ============================================================
-CHECK TARGET ALU
+TARGET ALU
 ============================================================
 */
 
@@ -55,26 +56,32 @@ function hasDiscount() {
         .innerText
         .replace(/\s+/g, " ");
 
-    const regex = /Disc\s*%|Disc(?:ount)?\s*Amt/gi;
+    const discountLabels = [
+        /Disc\s*%/gi,
+        /Disc(?:ount)?\s*Amt/gi
+    ];
 
-    let match;
+    for (const regex of discountLabels) {
 
-    while ((match = regex.exec(text)) !== null) {
+        let match;
 
-        const remaining = text.substring(regex.lastIndex);
+        while ((match = regex.exec(text)) !== null) {
 
-        const valueMatch = remaining.match(
-            /^\s*[:：]?\s*[₱$]?\s*(-?[\d,]+(?:\.\d+)?)/ 
-        );
+            const remaining = text.substring(regex.lastIndex);
 
-        if (!valueMatch) continue;
+            const valueMatch = remaining.match(
+                /^\s*[:：]?\s*[₱$]?\s*(-?[\d,]+(?:\.\d+)?)/ 
+            );
 
-        const value = parseFloat(
-            valueMatch[1].replace(/,/g, "")
-        );
+            if (!valueMatch) continue;
 
-        if (value > 0) {
-            return true;
+            const value = parseFloat(
+                valueMatch[1].replace(/,/g, "")
+            );
+
+            if (value > 0) {
+                return true;
+            }
         }
     }
 
@@ -84,7 +91,7 @@ function hasDiscount() {
 
 /*
 ============================================================
-CHECK COMMENT1
+COMMENT1 - PRESERVE ORIGINAL LOGIC
 ============================================================
 */
 
@@ -93,17 +100,18 @@ function getComment1() {
     const input = document.getElementById("comment1");
     const totalInput = document.getElementById("documentTotal");
 
-    // Preserve original negative-total behavior.
     if (
         totalInput &&
         totalInput.value.trim().startsWith("-")
     ) {
-        return REQUIRED_COMMENT;
+        savedComment1 = REQUIRED_COMMENT;
+
+    } else if (input) {
+
+        savedComment1 = input.value.trim().toUpperCase();
     }
 
-    return input
-        ? input.value.trim().toUpperCase()
-        : "";
+    return savedComment1;
 }
 
 
@@ -119,12 +127,11 @@ function updateTenderButton() {
 
     if (!tenderButton) return;
 
-    const targetPresent = hasTargetALU();
+    // Normal transactions: no additional restrictions.
+    if (!hasTargetALU()) {
 
-    // Normal transactions have no additional restrictions.
-    if (!targetPresent) {
-
-        lastState = null;
+        savedComment1 = "";
+        lastValidationState = "";
 
         tenderButton.disabled = false;
         tenderButton.style.pointerEvents = "";
@@ -149,13 +156,13 @@ function updateTenderButton() {
     });
 
     if (
-        lastState === state &&
+        lastValidationState === state &&
         tenderButton.disabled === disable
     ) {
         return;
     }
 
-    lastState = state;
+    lastValidationState = state;
 
     tenderButton.disabled = disable;
 
@@ -168,19 +175,23 @@ function updateTenderButton() {
     if (disable) {
 
         if (!validDiscount && !validComment) {
+
             tenderButton.title =
-                "Discounts are not allowed. Comment1 must be CTBGWP.";
+                "Discount is not allowed and Comment1 must be CTBGWP.";
 
         } else if (!validDiscount) {
+
             tenderButton.title =
-                "Discount detected. Remove the discount before Tender.";
+                "Discount detected. Remove discount before Tender.";
 
         } else {
+
             tenderButton.title =
                 "Comment1 must be CTBGWP before Tender.";
         }
 
     } else {
+
         tenderButton.title = "";
     }
 }
@@ -211,13 +222,11 @@ document.addEventListener("click", function(e) {
 
         updateTenderButton();
 
-        console.warn(
-            "Tender blocked:",
-            {
-                discountDetected,
-                validComment
-            }
-        );
+        console.warn("Tender blocked:", {
+            discountDetected,
+            comment1: savedComment1,
+            validComment
+        });
     }
 
 }, true);
@@ -232,6 +241,16 @@ MONITOR COMMENT1 INPUT
 document.addEventListener("input", function(e) {
 
     if (e.target && e.target.id === "comment1") {
+
+        const totalInput = document.getElementById("documentTotal");
+
+        if (
+            !totalInput ||
+            !totalInput.value.trim().startsWith("-")
+        ) {
+            savedComment1 = e.target.value.trim().toUpperCase();
+        }
+
         updateTenderButton();
     }
 
